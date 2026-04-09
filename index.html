@@ -113,7 +113,7 @@ async function connectToken(){
   btn.disabled = true;
   document.getElementById('token-error').style.display = 'none';
   try{
-    const r = await fetch('https://api.allorigins.win/raw?url=https://app.reportei.com/api/v2/companies/settings',{
+    const r = await fetch('/api/reportei?path=/companies/settings',{
       headers:{'Authorization':'Bearer '+val,'x-requested-with':'XMLHttpRequest'}
     });
     if(!r.ok) throw new Error('invalid');
@@ -205,7 +205,7 @@ function getDates(){
 
 async function fetchR(path, opts={}){
   try{
-    const url = 'https://api.allorigins.win/raw?url=https://app.reportei.com/api/v2'+path;
+    const url = '/api/reportei?path='+path;
     const r = await fetch(url,{
       headers:{'Authorization':'Bearer '+SESSION_TOKEN,'Content-Type':'application/json','x-requested-with':'XMLHttpRequest'},
       ...opts
