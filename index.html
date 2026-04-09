@@ -251,7 +251,7 @@ function fmt(val){
   if(val===undefined||val===null) return '-';
   if(Math.abs(val)>=1000000) return (val/1000000).toFixed(1)+'M';
   if(Math.abs(val)>=1000) return (val/1000).toFixed(1)+'k';
-  if(Math.abs(val)<10) return val.toFixed(2);
+  if(Math.abs(val)<10) return parseFloat(val).toFixed(2);
   return Math.round(val).toLocaleString('pt-BR');
 }
 
