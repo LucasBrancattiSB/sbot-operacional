@@ -69,7 +69,6 @@ hr.divider{border:none;border-top:1px solid #e5e5e3;margin:10px 0}
     </div>
     <div id="status-dot"></div>
   </div>
-
   <div id="token-screen">
     <h2>Conectar ao Reportei</h2>
     <p>Cole o token de API da SB Marketing abaixo. Ele fica salvo só nessa sessão do navegador.</p>
@@ -80,7 +79,6 @@ hr.divider{border:none;border-top:1px solid #e5e5e3;margin:10px 0}
     <span id="token-error">Token inválido. Verifique e tente novamente.</span>
     <p id="token-hint">Onde achar: app.reportei.com → menu → API Reportei</p>
   </div>
-
   <div id="chat-area">
     <div id="toolbar">
       <button class="quick-btn" onclick="dispatchMsg('insights Adega Point semana passada')">Adega Point</button>
@@ -100,7 +98,6 @@ hr.divider{border:none;border-top:1px solid #e5e5e3;margin:10px 0}
     </div>
   </div>
 </div>
-
 <script>
 let SESSION_TOKEN = sessionStorage.getItem('sb_reportei_token') || null;
 if(SESSION_TOKEN) initChat();
@@ -113,9 +110,7 @@ async function connectToken(){
   btn.disabled = true;
   document.getElementById('token-error').style.display = 'none';
   try{
-    const r = await fetch('/api/reportei?path=/companies/settings',{
-      headers:{'Authorization':'Bearer '+val,'x-requested-with':'XMLHttpRequest'}
-    });
+    const r = await fetch('/api/reportei?path='+encodeURIComponent('/companies/settings'),{headers:{'Authorization':'Bearer '+val}});
     if(!r.ok) throw new Error('invalid');
     const data = await r.json();
     SESSION_TOKEN = val;
@@ -130,13 +125,12 @@ async function connectToken(){
 
 function initChat(company){
   document.getElementById('token-screen').style.display = 'none';
-  const ca = document.getElementById('chat-area');
-  ca.style.display = 'flex';
+  document.getElementById('chat-area').style.display = 'flex';
   document.getElementById('status-dot').classList.add('online');
   if(company){
     addMsg('bot','Conectado como <strong>'+company.name+'</strong> — '+company.total_clients+' clientes.<br><br>Me diga qual cliente ou squad quer analisar, ou use os atalhos acima.');
   } else {
-    addMsg('bot','Reconectado! Me diga qual cliente ou squad quer analisar.');
+    addMsg('bot','Reconectado! Me diga qual cliente quer analisar.');
   }
 }
 
@@ -205,11 +199,8 @@ function getDates(){
 
 async function fetchR(path, opts={}){
   try{
-    const url = '/api/reportei?path='+path;
-    const r = await fetch(url,{
-      headers:{'Authorization':'Bearer '+SESSION_TOKEN,'Content-Type':'application/json','x-requested-with':'XMLHttpRequest'},
-      ...opts
-    });
+    const url = '/api/reportei?path='+encodeURIComponent(path);
+    const r = await fetch(url,{headers:{'Authorization':'Bearer '+SESSION_TOKEN,'Content-Type':'application/json'},...opts});
     if(!r.ok) return null;
     return r.json();
   }catch(e){return null}
@@ -222,8 +213,8 @@ async function findProject(name){
   return data.data.find(p=>p.name.toLowerCase().includes(n))||data.data[0];
 }
 
-async function getIntegrations(projectId){
-  const data = await fetchR('/integrations?project_id='+projectId+'&per_page=100');
+async function getIntegrations(pid){
+  const data = await fetchR('/integrations?project_id='+pid+'&per_page=100');
   return data?data.data:[];
 }
 
@@ -232,8 +223,8 @@ async function getMetricsList(slug){
   return data?data.data:[];
 }
 
-async function getMetricData(integrationId, metrics, start, end){
-  const data = await fetchR('/metrics/get-data',{method:'POST',body:JSON.stringify({start,end,integration_id:integrationId,metrics})});
+async function getMetricData(iid, metrics, start, end){
+  const data = await fetchR('/metrics/get-data',{method:'POST',body:JSON.stringify({start,end,integration_id:iid,metrics})});
   return data?data.data:null;
 }
 
@@ -249,39 +240,66 @@ function pickMetrics(all){
 
 function fmt(val){
   if(val===undefined||val===null) return '-';
-  if(Math.abs(val)>=1000000) return (val/1000000).toFixed(1)+'M';
-  if(Math.abs(val)>=1000) return (val/1000).toFixed(1)+'k';
-  if(Math.abs(val)<10) return parseFloat(val).toFixed(2);
-  return Math.round(val).toLocaleString('pt-BR');
+  const n=parseFloat(val);
+  if(isNaN(n)) return '-';
+  if(Math.abs(n)>=1000000) return (n/1000000).toFixed(1)+'M';
+  if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k';
+  if(Math.abs(n)<10) return n.toFixed(2);
+  return Math.round(n).toLocaleString('pt-BR');
 }
 
 function fmtDiff(d){
-  if(!d&&d!==0) return '';
-  const v=(d*100).toFixed(1);
-  return d>0?'+'+v+'%':v+'%';
+  if(d===undefined||d===null) return '';
+  const n=parseFloat(d);
+  if(isNaN(n)) return '';
+  const v=(n*100).toFixed(1);
+  return n>0?'+'+v+'%':v+'%';
 }
 
 function labelForKey(key){
+  if(!key) return '-';
   const map={spend:'Investimento',impressions:'Impressões',reach:'Alcance',clicks:'Cliques',ctr:'CTR',cpc:'CPC',conversions:'Conversões',cost_per_conversion:'Custo/conv.',followers:'Seguidores',engagement:'Engajamento',engagement_rate:'Taxa eng.',page_views:'Visualizações',sessions:'Sessões',users:'Usuários'};
   const k=key.replace(/^[^:]+:/,'');
   return map[k]||k;
 }
 
-async function buildAIInsight(clientName, integrations, metricsData, start, end){
+function buildMetricsHTML(integrations, metricsData, metricsMeta){
+  let html='';
+  for(const integ of integrations){
+    const mdata=metricsData[integ.id];
+    if(!mdata) continue;
+    let rows='';
+    for(const [id,val] of Object.entries(mdata)){
+      if(!val||val.values===undefined||val.values===null) continue;
+      const n=parseFloat(val.values);
+      if(isNaN(n)) continue;
+      const diff=val.comparison?val.comparison.difference:0;
+      const cls=diff>2?'up':diff<-2?'down':'neutral';
+      const lbl=metricsMeta[id]?labelForKey(metricsMeta[id]):labelForKey(id);
+      const diffStr=val.comparison?fmtDiff(val.comparison.difference/100):'';
+      rows+='<div class="metric-row"><span>'+lbl+'</span><span class="'+cls+'">'+fmt(n)+(diffStr?' <small>'+diffStr+'</small>':'')+'</span></div>';
+    }
+    if(rows) html+='<div class="section-title">'+integ.name+'</div>'+rows;
+  }
+  return html;
+}
+
+async function buildAIInsight(clientName, integrations, metricsData, metricsMeta, start, end){
   let summary='Cliente: '+clientName+'\nPeríodo: '+start+' a '+end+'\n\n';
   for(const integ of integrations){
     summary+='Integração: '+integ.name+' ('+integ.slug+')\n';
     if(metricsData[integ.id]){
       for(const [id,val] of Object.entries(metricsData[integ.id])){
-        if(val&&val.values!==undefined){
+        if(val&&val.values!==undefined&&val.values!==null&&!isNaN(parseFloat(val.values))){
+          const lbl=metricsMeta[id]?labelForKey(metricsMeta[id]):id;
           const diff=val.comparison?fmtDiff(val.comparison.difference/100):'';
-          summary+='  '+labelForKey(id)+': '+fmt(val.values)+' '+diff+'\n';
+          summary+='  '+lbl+': '+fmt(val.values)+' '+diff+'\n';
         }
       }
     }
     summary+='\n';
   }
-  const prompt='Você é o SBot, assistente de marketing da SB Marketing, agência com squads nichados.\n\nAnalise os dados e gere um insight semanal em português, direto e acionável:\n- 2 linhas de diagnóstico geral\n- 2-3 pontos de destaque com bullet •\n- 1 recomendação de ação\n\nTom: próximo, profissional, sem ser formal. Máximo 150 palavras.\n\nDADOS:\n'+summary;
+  const prompt='Você é o SBot, assistente de marketing da SB Marketing.\n\nAnalise os dados e gere um insight semanal em português, direto e acionável:\n- 2 linhas de diagnóstico geral\n- 2-3 pontos de destaque com bullet •\n- 1 recomendação de ação\n\nTom: próximo, profissional, sem ser formal. Máximo 150 palavras.\n\nDADOS:\n'+summary;
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -291,22 +309,6 @@ async function buildAIInsight(clientName, integrations, metricsData, start, end)
     const d=await res.json();
     return d.content&&d.content[0]?d.content[0].text:null;
   }catch(e){return null}
-}
-
-function buildMetricsHTML(integrations, metricsData, metricsMeta){
-  let html='';
-  for(const integ of integrations){
-    const mdata=metricsData[integ.id];
-    if(!mdata) continue;
-    html+='<div class="section-title">'+integ.name+'</div>';
-    for(const [id,val] of Object.entries(mdata)){
-      if(!val||val.values===undefined) continue;
-      const diff=val.comparison?val.comparison.difference:0;
-      const cls=diff>2?'up':diff<-2?'down':'neutral';
-      const lbl = (metricsMeta&&metricsMeta[id])?labelForKey(metricsMeta[id]):labelForKey(id); if(isNaN(val.values)||val.values===nul100)+'</small></span></div>';
-    }
-  }
-  return html;
 }
 
 const squadMap={
@@ -327,49 +329,41 @@ async function processMsg(text){
   if(squadKey){
     removeThinking();
     const clients=squadMap[squadKey];
-    addMsg('bot','Squad <strong>'+squadKey.charAt(0).toUpperCase()+squadKey.slice(1)+'</strong> — '+clients.length+' clientes ativos.<br><br>'+clients.join(', ')+'<br><br>Qual quer analisar primeiro?');
+    addMsg('bot','Squad <strong>'+squadKey.charAt(0).toUpperCase()+squadKey.slice(1)+'</strong> — '+clients.length+' clientes.<br><br>'+clients.join(', ')+'<br><br>Qual quer analisar primeiro?');
     return;
   }
 
   let clientName=text.replace(/insights?/gi,'').replace(/semana passada/gi,'').replace(/essa semana/gi,'').replace(/como foi/gi,'').replace(/resumo/gi,'').replace(/^(o|a|do|da|de)\s+/i,'').trim();
-  if(!clientName){
-    removeThinking();
-    addMsg('bot','Qual cliente quer analisar?');
-    return;
-  }
+  if(!clientName){ removeThinking(); addMsg('bot','Qual cliente quer analisar?'); return; }
 
   const project=await findProject(clientName);
-  if(!project){
-    removeThinking();
-    addMsg('bot','Não encontrei "<strong>'+clientName+'</strong>" no Reportei. Verifique o nome.');
-    return;
-  }
+  if(!project){ removeThinking(); addMsg('bot','Não encontrei "<strong>'+clientName+'</strong>" no Reportei.'); return; }
 
   const integrations=await getIntegrations(project.id);
-  if(!integrations.length){
-    removeThinking();
-    addMsg('bot','Projeto <strong>'+project.name+'</strong> encontrado, mas sem integrações ativas.');
-    return;
-  }
+  if(!integrations.length){ removeThinking(); addMsg('bot','Projeto <strong>'+project.name+'</strong> sem integrações ativas.'); return; }
 
   const {start,end}=getDates();
-  const metricsData={}; const metricsMeta={};
+  const metricsData={}, metricsMeta={};
   for(const integ of integrations.slice(0,3)){
     const allMetrics=await getMetricsList(integ.slug);
     if(!allMetrics.length) continue;
     const selected=pickMetrics(allMetrics);
     const data=await getMetricData(integ.id,selected,start,end);
-    if(data){metricsData[integ.id]=data; selected.forEach(m=>{if(m.id)metricsMeta[m.id]=m.reference_key||m.id;});}
+    if(data){
+      metricsData[integ.id]=data;
+      selected.forEach(m=>{ if(m.id) metricsMeta[m.id]=m.reference_key||m.id; });
+    }
   }
 
   const metricsHTML=buildMetricsHTML(integrations,metricsData,metricsMeta);
-  const aiInsight=await buildAIInsight(project.name,integrations,metricsData,start,end);
+  const aiInsight=await buildAIInsight(project.name,integrations,metricsData,metricsMeta,start,end);
 
   removeThinking();
 
   let html='<strong>'+project.name+'</strong><br><small style="color:#888">'+start+' a '+end+'</small>';
   if(metricsHTML) html+='<br><br>'+metricsHTML;
   if(aiInsight) html+='<hr class="divider"><div class="section-title">Análise SBot</div>'+aiInsight.replace(/\n/g,'<br>');
+  if(!metricsHTML&&!aiInsight) html+='<br><br>Não encontrei dados para esse período.';
 
   addMsg('bot',html);
 }
