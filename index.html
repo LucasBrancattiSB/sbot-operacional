@@ -3,148 +3,408 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBot Operacional — SB Marketing</title>
+<title>SBot — SB Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-#app{display:flex;flex-direction:column;height:680px;width:100%;max-width:680px;background:#fff;border:1px solid #e5e5e3;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-#header{padding:14px 18px;border-bottom:1px solid #e5e5e3;display:flex;align-items:center;gap:10px}
-#avatar{width:34px;height:34px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
-#header-info{flex:1}
-#header-title{font-size:14px;font-weight:600;color:#1a1a1a}
-#header-sub{font-size:12px;color:#888}
-#status-dot{width:7px;height:7px;border-radius:50%;background:#ccc;flex-shrink:0;transition:background .3s}
-#status-dot.online{background:#1D9E75}
-#token-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:14px}
-#token-screen h2{font-size:16px;font-weight:600;color:#1a1a1a}
-#token-screen p{font-size:13px;color:#666;text-align:center;line-height:1.6;max-width:320px}
-#token-input-wrap{display:flex;gap:8px;width:100%;max-width:360px}
-#token-field{flex:1;height:38px;border-radius:8px;border:1px solid #ddd;background:#f9f9f8;padding:0 12px;font-size:13px;font-family:monospace;color:#1a1a1a;outline:none}
-#token-field:focus{border-color:#534AB7}
-#token-btn{height:38px;padding:0 18px;border-radius:8px;border:1px solid #534AB7;background:#534AB7;font-size:13px;font-weight:500;cursor:pointer;color:#fff}
-#token-btn:hover{background:#3C3489}
-#token-btn:disabled{opacity:.6;cursor:not-allowed}
-#token-error{font-size:12px;color:#c0392b;display:none}
-#token-hint{font-size:11px;color:#aaa;text-align:center}
-#chat-area{flex:1;display:none;flex-direction:column;overflow:hidden}
-#toolbar{padding:8px 14px;border-bottom:1px solid #e5e5e3;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.quick-btn{height:26px;padding:0 10px;border-radius:6px;border:1px solid #e5e5e3;background:transparent;font-size:12px;cursor:pointer;color:#555;white-space:nowrap}
-.quick-btn:hover{background:#f5f5f3;color:#1a1a1a}
-#logout-btn{margin-left:auto;height:26px;padding:0 10px;border-radius:6px;border:1px solid #e5e5e3;background:transparent;font-size:12px;cursor:pointer;color:#aaa}
-#logout-btn:hover{color:#c0392b;border-color:#c0392b}
-#messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg{display:flex;gap:8px;align-items:flex-start}
-.msg.user{flex-direction:row-reverse}
-.bubble{max-width:82%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.6;color:#1a1a1a}
-.msg.bot .bubble{background:#f5f5f3;border:1px solid #e5e5e3;border-radius:4px 14px 14px 14px}
-.msg.user .bubble{background:#534AB7;color:#fff;border-radius:14px 4px 14px 14px}
-.msg-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px}
-.bot-av{background:#EEEDFE;color:#534AB7}
-.user-av{background:#E6F1FB;color:#185FA5}
-.thinking{display:flex;gap:4px;align-items:center;padding:10px 13px}
-.dot{width:6px;height:6px;border-radius:50%;background:#bbb;animation:bounce 1.2s infinite}
-.dot:nth-child(2){animation-delay:.2s}
-.dot:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-#input-area{padding:12px 16px;border-top:1px solid #e5e5e3;display:flex;gap:8px;align-items:center}
-#msg-input{flex:1;height:38px;border-radius:8px;border:1px solid #ddd;background:#f9f9f8;padding:0 12px;font-size:13px;color:#1a1a1a;outline:none}
-#msg-input:focus{border-color:#534AB7}
-#send-btn{height:38px;padding:0 16px;border-radius:8px;border:1px solid #534AB7;background:#534AB7;font-size:13px;font-weight:500;cursor:pointer;color:#fff}
-#send-btn:hover{background:#3C3489}
-.section-title{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin:8px 0 4px}
-.metric-row{display:flex;justify-content:space-between;font-size:13px;padding:2px 0}
-.up{color:#0F6E56;font-weight:500}
-.down{color:#c0392b;font-weight:500}
-.neutral{color:#888}
-hr.divider{border:none;border-top:1px solid #e5e5e3;margin:10px 0}
+:root {
+  --black: #0a0a0a;
+  --black2: #111111;
+  --black3: #1a1a1a;
+  --yellow: #F5E642;
+  --yellow2: #e6d800;
+  --white: #f0f0ee;
+  --gray: #888880;
+  --gray2: #333330;
+  --border: rgba(245,230,66,.12);
+  --border2: rgba(245,230,66,.25);
+  --radius: 12px;
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--black);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#app {
+  width: 100%;
+  max-width: 720px;
+  height: 92vh;
+  max-height: 800px;
+  background: var(--black2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+#app::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--yellow);
+  border-radius: 20px 20px 0 0;
+}
+
+/* HEADER */
+#header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#logo {
+  width: 36px;
+  height: 36px;
+  background: var(--yellow);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--black);
+  letter-spacing: -1px;
+}
+#header-info { flex: 1; }
+#header-title { font-size: 14px; font-weight: 600; color: var(--white); }
+#header-sub { font-size: 11px; color: var(--gray); font-family: var(--mono); margin-top: 1px; }
+#status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--gray);
+  font-family: var(--mono);
+}
+#status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gray2);
+  transition: background .3s;
+}
+#status-dot.online { background: #4ade80; box-shadow: 0 0 6px #4ade8066; }
+
+/* TOKEN SCREEN */
+#token-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  gap: 20px;
+}
+.lock-icon {
+  width: 48px; height: 48px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+#token-screen h2 { font-size: 18px; font-weight: 600; color: var(--white); }
+#token-screen p { font-size: 13px; color: var(--gray); text-align: center; line-height: 1.6; max-width: 300px; }
+#token-wrap { display: flex; gap: 8px; width: 100%; max-width: 380px; }
+#token-field {
+  flex: 1; height: 40px;
+  background: var(--black3);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-family: var(--mono);
+  color: var(--white);
+  outline: none;
+}
+#token-field:focus { border-color: var(--yellow); }
+#token-btn {
+  height: 40px; padding: 0 20px;
+  background: var(--yellow);
+  border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  font-family: var(--font);
+  color: var(--black); cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+#token-btn:hover { background: var(--yellow2); }
+#token-btn:disabled { opacity: .5; cursor: not-allowed; }
+#token-error { font-size: 12px; color: #f87171; display: none; font-family: var(--mono); }
+#token-hint { font-size: 11px; color: var(--gray2); font-family: var(--mono); }
+
+/* CHAT */
+#chat-area { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+#toolbar {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+}
+.q-btn {
+  height: 26px; padding: 0 10px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  font-size: 11px; font-family: var(--font);
+  color: var(--gray); cursor: pointer;
+  transition: all .15s; white-space: nowrap;
+}
+.q-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+#logout-btn {
+  margin-left: auto; height: 26px; padding: 0 10px;
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 6px; font-size: 11px; font-family: var(--mono);
+  color: var(--gray2); cursor: pointer;
+}
+#logout-btn:hover { color: #f87171; border-color: #f87171; }
+#messages {
+  flex: 1; overflow-y: auto; padding: 20px 16px;
+  display: flex; flex-direction: column; gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray2) transparent;
+}
+.msg { display: flex; gap: 10px; align-items: flex-start; }
+.msg.user { flex-direction: row-reverse; }
+.av {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+}
+.av.bot { background: var(--yellow); color: var(--black); }
+.av.user { background: var(--black3); border: 1px solid var(--border2); color: var(--yellow); font-family: var(--mono); }
+.bubble {
+  max-width: 82%; padding: 11px 14px;
+  font-size: 13px; line-height: 1.65; border-radius: 14px;
+}
+.msg.bot .bubble {
+  background: var(--black3);
+  border: 1px solid var(--border);
+  border-radius: 4px 14px 14px 14px;
+  color: var(--white);
+}
+.msg.user .bubble {
+  background: var(--yellow);
+  color: var(--black);
+  border-radius: 14px 4px 14px 14px;
+  font-weight: 500;
+}
+.thinking { display: flex; gap: 5px; align-items: center; padding: 12px 14px; }
+.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--yellow); animation: pulse 1.4s infinite; }
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse { 0%,60%,100%{opacity:.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.3)} }
+
+/* INPUT */
+#input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-end;
+}
+#msg-input {
+  flex: 1; min-height: 40px; max-height: 100px;
+  background: var(--black3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px; font-family: var(--font);
+  color: var(--white); outline: none; resize: none;
+  line-height: 1.5;
+}
+#msg-input:focus { border-color: var(--yellow); }
+#send-btn {
+  height: 40px; padding: 0 16px;
+  background: var(--yellow); border: none;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  font-family: var(--font); color: var(--black);
+  cursor: pointer; flex-shrink: 0;
+}
+#send-btn:hover { background: var(--yellow2); }
+
+/* UPLOAD */
+#upload-area {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+#upload-label {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border: 1px dashed var(--border2);
+  border-radius: 8px; cursor: pointer;
+  font-size: 12px; color: var(--gray);
+  transition: all .15s;
+}
+#upload-label:hover { border-color: var(--yellow); color: var(--yellow); }
+#upload-label svg { flex-shrink: 0; }
+#pdf-input { display: none; }
+#pdf-name { font-family: var(--mono); font-size: 11px; color: var(--yellow); display: none; }
+
+/* INSIGHT OUTPUT */
+.insight-card {
+  background: var(--black);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 8px;
+}
+.insight-card .ic-header {
+  font-size: 11px; font-family: var(--mono);
+  color: var(--yellow); margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.insight-card .ic-body { font-size: 13px; line-height: 1.7; color: var(--white); }
+.insight-card .ic-body strong { color: var(--yellow); font-weight: 600; }
+.copy-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding: 7px 14px;
+  background: transparent; border: 1px solid var(--border2);
+  border-radius: 6px; font-size: 12px; font-family: var(--mono);
+  color: var(--gray); cursor: pointer; transition: all .15s;
+}
+.copy-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+/* METRICS */
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.metric-card {
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px;
+}
+.metric-card .mk { font-size: 10px; color: var(--gray); font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.metric-card .mv { font-size: 16px; font-weight: 600; color: var(--white); margin-top: 2px; }
+.metric-card .md { font-size: 11px; font-family: var(--mono); margin-top: 2px; }
+.md.up { color: #4ade80; }
+.md.down { color: #f87171; }
+.md.neutral { color: var(--gray); }
 </style>
 </head>
 <body>
 <div id="app">
   <div id="header">
-    <div id="avatar">SB</div>
+    <div id="logo">B</div>
     <div id="header-info">
       <div id="header-title">SBot Operacional</div>
-      <div id="header-sub">Insights semanais · Reportei + IA</div>
+      <div id="header-sub">sb-marketing · análise de relatórios</div>
     </div>
-    <div id="status-dot"></div>
+    <div id="status">
+      <div id="status-dot"></div>
+      <span id="status-txt">offline</span>
+    </div>
   </div>
+
   <div id="token-screen">
-    <h2>Conectar ao Reportei</h2>
-    <p>Cole o token de API da SB Marketing abaixo. Ele fica salvo só nessa sessão do navegador.</p>
-    <div id="token-input-wrap">
-      <input id="token-field" type="password" placeholder="Cole o token aqui..." onkeydown="if(event.key==='Enter')connectToken()">
-      <button id="token-btn" onclick="connectToken()">Conectar</button>
+    <div class="lock-icon">🔐</div>
+    <h2>Acesso restrito</h2>
+    <p>Cole o token de API do Reportei para entrar. Fica salvo só nessa sessão.</p>
+    <div id="token-wrap">
+      <input id="token-field" type="password" placeholder="token do reportei..." onkeydown="if(event.key==='Enter')connectToken()">
+      <button id="token-btn" onclick="connectToken()">Entrar</button>
     </div>
     <span id="token-error">Token inválido. Verifique e tente novamente.</span>
-    <p id="token-hint">Onde achar: app.reportei.com → menu → API Reportei</p>
+    <span id="token-hint">app.reportei.com → menu → API Reportei</span>
   </div>
+
   <div id="chat-area">
+    <div id="upload-area">
+      <label id="upload-label" for="pdf-input">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span id="upload-txt">Subir relatório PDF do Reportei</span>
+        <span id="pdf-name"></span>
+      </label>
+      <input type="file" id="pdf-input" accept=".pdf" onchange="handlePDF(this)">
+    </div>
     <div id="toolbar">
-      <button class="quick-btn" onclick="dispatchMsg('insights Adega Point semana passada')">Adega Point</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights Pizza Mais semana passada')">Pizza Mais</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights Humm Sorvetes semana passada')">Humm Sorvetes</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights TechChef semana passada')">TechChef</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights Rosenberger semana passada')">Rosenberger</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights Parque Capivari semana passada')">Parque Capivari</button>
-      <button class="quick-btn" onclick="dispatchMsg('insights Saneares semana passada')">Saneares</button>
-      <button class="quick-btn" onclick="dispatchMsg('resumo squad Ruptura')">Ruptura</button>
-      <button class="quick-btn" onclick="dispatchMsg('resumo squad Ignição')">Ignição</button>
-      <button class="quick-btn" onclick="dispatchMsg('resumo squad Avalanche')">Avalanche</button>
-      <button id="logout-btn" onclick="logout()">Sair</button>
+      <button class="q-btn" onclick="dispatchMsg('gerar insights do relatório enviado')">Gerar insights</button>
+      <button class="q-btn" onclick="dispatchMsg('quais foram os melhores conteúdos da semana?')">Melhores conteúdos</button>
+      <button class="q-btn" onclick="dispatchMsg('o que precisa de atenção essa semana?')">Pontos de atenção</button>
+      <button class="q-btn" onclick="dispatchMsg('gerar mensagem para enviar no whatsapp do cliente')">Texto p/ WhatsApp</button>
+      <button id="logout-btn" onclick="logout()">sair</button>
     </div>
     <div id="messages"></div>
     <div id="input-area">
-      <input id="msg-input" placeholder="Ex: insights Rosenberger semana passada..." onkeydown="if(event.key==='Enter')sendMsg()">
-      <button id="send-btn" onclick="sendMsg()">Enviar</button>
+      <textarea id="msg-input" placeholder="Pergunte sobre o relatório..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}" oninput="this.style.height='40px';this.style.height=this.scrollHeight+'px'"></textarea>
+      <button id="send-btn" onclick="sendMsg()">→</button>
     </div>
   </div>
 </div>
+
 <script>
 let SESSION_TOKEN = sessionStorage.getItem('sb_reportei_token') || null;
+let pdfBase64 = sessionStorage.getItem('sb_pdf_b64') || null;
+let pdfName = sessionStorage.getItem('sb_pdf_name') || null;
+let conversationHistory = [];
+
 if(SESSION_TOKEN) initChat();
 
 async function connectToken(){
   const val = document.getElementById('token-field').value.trim();
   if(!val) return;
   const btn = document.getElementById('token-btn');
-  btn.textContent = 'Verificando...';
-  btn.disabled = true;
+  btn.textContent = 'Verificando...'; btn.disabled = true;
   document.getElementById('token-error').style.display = 'none';
   try{
     const r = await fetch('/api/reportei?path='+encodeURIComponent('/companies/settings'),{headers:{'Authorization':'Bearer '+val}});
-    if(!r.ok) throw new Error('invalid');
+    if(!r.ok) throw new Error();
     const data = await r.json();
     SESSION_TOKEN = val;
     sessionStorage.setItem('sb_reportei_token', val);
     initChat(data.company);
   }catch(e){
-    document.getElementById('token-error').style.display = 'block';
-    btn.textContent = 'Conectar';
-    btn.disabled = false;
+    document.getElementById('token-error').style.display='block';
+    btn.textContent='Entrar'; btn.disabled=false;
   }
 }
 
 function initChat(company){
-  document.getElementById('token-screen').style.display = 'none';
-  document.getElementById('chat-area').style.display = 'flex';
+  document.getElementById('token-screen').style.display='none';
+  document.getElementById('chat-area').style.display='flex';
   document.getElementById('status-dot').classList.add('online');
-  if(company){
-    addMsg('bot','Conectado como <strong>'+company.name+'</strong> — '+company.total_clients+' clientes.<br><br>Me diga qual cliente ou squad quer analisar, ou use os atalhos acima.');
-  } else {
-    addMsg('bot','Reconectado! Me diga qual cliente quer analisar.');
+  document.getElementById('status-txt').textContent='online';
+  if(pdfName){
+    document.getElementById('pdf-name').textContent=pdfName;
+    document.getElementById('pdf-name').style.display='block';
+    document.getElementById('upload-txt').style.display='none';
   }
+  const name = company ? company.name : 'SB Marketing';
+  addMsg('bot', `Olá! Conectado como <strong>${name}</strong>.<br><br>Para começar, suba o PDF do relatório semanal do Reportei. Depois é só clicar em <strong>Gerar insights</strong> ou fazer qualquer pergunta sobre os dados.`);
 }
 
 function logout(){
-  SESSION_TOKEN = null;
-  sessionStorage.removeItem('sb_reportei_token');
-  document.getElementById('chat-area').style.display = 'none';
-  document.getElementById('token-screen').style.display = 'flex';
+  SESSION_TOKEN = null; pdfBase64 = null; pdfName = null;
+  sessionStorage.clear();
+  conversationHistory = [];
+  document.getElementById('chat-area').style.display='none';
+  document.getElementById('token-screen').style.display='flex';
   document.getElementById('status-dot').classList.remove('online');
-  document.getElementById('token-btn').textContent = 'Conectar';
-  document.getElementById('token-btn').disabled = false;
-  document.getElementById('messages').innerHTML = '';
+  document.getElementById('status-txt').textContent='offline';
+  document.getElementById('token-btn').textContent='Entrar';
+  document.getElementById('token-btn').disabled=false;
+  document.getElementById('messages').innerHTML='';
+}
+
+function handlePDF(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const b64 = e.target.result.split(',')[1];
+    pdfBase64 = b64; pdfName = file.name;
+    sessionStorage.setItem('sb_pdf_b64', b64);
+    sessionStorage.setItem('sb_pdf_name', file.name);
+    document.getElementById('pdf-name').textContent = file.name;
+    document.getElementById('pdf-name').style.display = 'block';
+    document.getElementById('upload-txt').style.display = 'none';
+    addMsg('bot', `PDF <strong>${file.name}</strong> carregado. Pode clicar em <strong>Gerar insights</strong> ou fazer perguntas sobre o relatório.`);
+  };
+  reader.readAsDataURL(file);
 }
 
 function dispatchMsg(text){ addMsg('user', text); }
@@ -153,7 +413,7 @@ function sendMsg(){
   const inp = document.getElementById('msg-input');
   const txt = inp.value.trim();
   if(!txt) return;
-  inp.value = '';
+  inp.value = ''; inp.style.height = '40px';
   addMsg('user', txt);
 }
 
@@ -162,13 +422,12 @@ function addMsg(role, text){
   const div = document.createElement('div');
   div.className = 'msg '+role;
   const av = document.createElement('div');
-  av.className = 'msg-av '+(role==='bot'?'bot-av':'user-av');
-  av.textContent = role==='bot'?'SB':'vc';
+  av.className = 'av '+role;
+  av.textContent = role==='bot'?'B':'vc';
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
   bubble.innerHTML = text;
-  div.appendChild(av);
-  div.appendChild(bubble);
+  div.appendChild(av); div.appendChild(bubble);
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
   if(role==='user') processMsg(text);
@@ -177,11 +436,9 @@ function addMsg(role, text){
 function showThinking(){
   const wrap = document.getElementById('messages');
   const div = document.createElement('div');
-  div.className = 'msg bot';
-  div.id = 'thinking-msg';
-  div.innerHTML = '<div class="msg-av bot-av">SB</div><div class="bubble thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
+  div.className = 'msg bot'; div.id = 'thinking-msg';
+  div.innerHTML = '<div class="av bot">B</div><div class="bubble thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  wrap.appendChild(div); wrap.scrollTop = wrap.scrollHeight;
 }
 
 function removeThinking(){
@@ -189,179 +446,137 @@ function removeThinking(){
   if(t) t.remove();
 }
 
-function getDates(){
-  const today = new Date();
-  const dow = today.getDay();
-  const diffMon = dow===0?6:dow-1;
-  const mon = new Date(today); mon.setDate(today.getDate()-diffMon-7);
-  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
-  const compMon = new Date(mon); compMon.setDate(mon.getDate()-7);
-  const compSun = new Date(sun); compSun.setDate(sun.getDate()-7);
-  const fmt = d => d.toISOString().split('T')[0];
-  return {start:fmt(mon), end:fmt(sun), compStart:fmt(compMon), compEnd:fmt(compSun)};
-}
-
-async function fetchR(path, opts={}){
-  try{
-    const url = '/api/reportei?path='+encodeURIComponent(path);
-    const r = await fetch(url,{headers:{'Authorization':'Bearer '+SESSION_TOKEN,'Content-Type':'application/json'},...opts});
-    if(!r.ok) return null;
-    return r.json();
-  }catch(e){return null}
-}
-
-async function findProject(name){
-  const data = await fetchR('/projects?q='+encodeURIComponent(name)+'&per_page=20');
-  if(!data||!data.data||!data.data.length) return null;
-  const n = name.toLowerCase();
-  return data.data.find(p=>p.name.toLowerCase().includes(n))||data.data[0];
-}
-
-async function getIntegrations(pid){
-  const data = await fetchR('/integrations?project_id='+pid+'&per_page=100');
-  return data?data.data:[];
-}
-
-async function getMetricsList(slug){
-  const data = await fetchR('/metrics?integration_slug='+slug+'&per_page=100');
-  return data?data.data:[];
-}
-
-async function getMetricData(iid, metrics, start, end, compStart, compEnd){
-  const body = {start, end, integration_id:iid, metrics};
-  if(compStart) { body.comparison_start = compStart; body.comparison_end = compEnd; }
-  const data = await fetchR('/metrics/get-data',{method:'POST',body:JSON.stringify(body)});
-  return data?data.data:null;
-}
-
-function pickMetrics(all){
-  const prio=['spend','impressions','reach','clicks','ctr','cpc','conversions','cost_per_conversion','followers','engagement','engagement_rate','page_views','sessions','users'];
-  const result=[];
-  for(const key of prio){
-    const found=all.find(m=>m.metrics&&m.metrics.includes(key));
-    if(found&&result.length<8) result.push(found);
-  }
-  return result.length?result:all.slice(0,6);
-}
-
-function fmt(val){
-  if(val===undefined||val===null) return '-';
-  const n=parseFloat(val);
-  if(isNaN(n)) return '-';
-  if(Math.abs(n)>=1000000) return (n/1000000).toFixed(1)+'M';
-  if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k';
-  if(Math.abs(n)<10) return n.toFixed(2);
-  return Math.round(n).toLocaleString('pt-BR');
-}
-
-function fmtDiff(d){
-  if(d===undefined||d===null) return '';
-  const n=parseFloat(d);
-  if(isNaN(n)) return '';
-  const v=(n*100).toFixed(1);
-  return n>0?'+'+v+'%':v+'%';
-}
-
-function labelForKey(key){
-  if(!key) return '-';
-  const map={spend:'Investimento',impressions:'Impressões',reach:'Alcance',clicks:'Cliques',ctr:'CTR',cpc:'CPC',conversions:'Conversões',cost_per_conversion:'Custo/conv.',followers:'Seguidores',engagement:'Engajamento',engagement_rate:'Taxa eng.',page_views:'Visualizações',sessions:'Sessões',users:'Usuários'};
-  const k=key.replace(/^[^:]+:/,'');
-  return map[k]||k;
-}
-
-function buildMetricsHTML(integrations, metricsData, metricsMeta){
-  let html='';
-  for(const integ of integrations){
-    const mdata=metricsData[integ.id];
-    if(!mdata) continue;
-    let rows='';
-    for(const [id,val] of Object.entries(mdata)){
-      if(!val||val.values===undefined||val.values===null) continue;
-      const n=parseFloat(val.values);
-      if(isNaN(n)) continue;
-      const diff=val.comparison?val.comparison.difference:0;
-      const cls=diff>2?'up':diff<-2?'down':'neutral';
-      const lbl=metricsMeta[id]?labelForKey(metricsMeta[id]):labelForKey(id);
-      const diffStr=val.comparison?fmtDiff(val.comparison.difference/100):'';
-      rows+='<div class="metric-row"><span>'+lbl+'</span><span class="'+cls+'">'+fmt(n)+(diffStr?' <small>'+diffStr+'</small>':'')+'</span></div>';
-    }
-    if(rows) html+='<div class="section-title">'+integ.name+'</div>'+rows;
-  }
-  return html;
-}
-
-async function buildAIInsight(clientName, integrations, metricsData, metricsMeta, start, end){
-  try{
-    const r = await fetch('/api/reportei', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer '+SESSION_TOKEN,
-        'Content-Type': 'application/json',
-        'x-action': 'generate-insight'
-      },
-      body: JSON.stringify({clientName, integrations, metricsData, metricsMeta, start, end})
-    });
-    if(!r.ok) return null;
-    const d = await r.json();
-    return d.insight || null;
-  }catch(e){return null}
-}
-
-const squadMap={
-  'ruptura':['Adega Point','Humm Sorvetes','Patrón','Pizza Mais','Restaurante Pagé','São Benedito Crepes','Tempero de Família'],
-  'ignição':['Alemão Madeiras','Colégio SFA','La Casa Planejados','Monteiro Contabilidade','Run Box Brasil','Saneares','TechChef'],
-  'avalanche':['Arraia do GAMT','Parque Capivari','Rosenberger','Total Tintas']
-};
-
 async function processMsg(text){
-  const t=text.toLowerCase();
-  showThinking();
-
-  let squadKey=null;
-  if(t.includes('ruptura')) squadKey='ruptura';
-  else if(t.includes('ignição')||t.includes('ignicao')) squadKey='ignição';
-  else if(t.includes('avalanche')) squadKey='avalanche';
-
-  if(squadKey){
-    removeThinking();
-    const clients=squadMap[squadKey];
-    addMsg('bot','Squad <strong>'+squadKey.charAt(0).toUpperCase()+squadKey.slice(1)+'</strong> — '+clients.length+' clientes.<br><br>'+clients.join(', ')+'<br><br>Qual quer analisar primeiro?');
+  if(!pdfBase64){
+    showThinking();
+    setTimeout(()=>{
+      removeThinking();
+      addMsg('bot','Primeiro suba o PDF do relatório Reportei usando o campo acima.');
+    }, 400);
     return;
   }
+  showThinking();
+  conversationHistory.push({role:'user', content: text});
 
-  let clientName=text.replace(/insights?/gi,'').replace(/semana passada/gi,'').replace(/essa semana/gi,'').replace(/como foi/gi,'').replace(/resumo/gi,'').replace(/^(o|a|do|da|de)\s+/i,'').trim();
-  if(!clientName){ removeThinking(); addMsg('bot','Qual cliente quer analisar?'); return; }
+  const systemPrompt = `Você é o SBot, analista sênior de marketing digital da SB Marketing — uma agência com squads nichados de alta performance. Você analisa relatórios do Reportei e gera insights estratégicos para os clientes da agência.
 
-  const project=await findProject(clientName);
-  if(!project){ removeThinking(); addMsg('bot','Não encontrei "<strong>'+clientName+'</strong>" no Reportei.'); return; }
+SEU PERFIL:
+- Especialista em social media, conteúdo orgânico e performance
+- Linguagem: profissional, direta e próxima — como um consultor de confiança, não como um robô
+- Nunca use termos exagerados como "explosão", "incrível", "extraordinário"
+- Sempre cite números reais do relatório
+- Mostre autoridade com análises contextualizadas
 
-  const integrations=await getIntegrations(project.id);
-  if(!integrations.length){ removeThinking(); addMsg('bot','Projeto <strong>'+project.name+'</strong> sem integrações ativas.'); return; }
+QUANDO GERAR INSIGHTS COMPLETOS, use EXATAMENTE esta estrutura:
 
-  const {start,end,compStart,compEnd}=getDates();
-  const metricsData={}, metricsMeta={};
-  for(const integ of integrations.slice(0,3)){
-    const allMetrics=await getMetricsList(integ.slug);
-    if(!allMetrics.length) continue;
-    const selected=pickMetrics(allMetrics);
-    const data=await getMetricData(integ.id,selected,start,end,compStart,compEnd);
-    if(data){
-      metricsData[integ.id]=data;
-      selected.forEach(m=>{ if(m.id) metricsMeta[m.id]=m.reference_key||m.id; });
+📊 *Panorama da semana*
+[2-3 linhas sobre o desempenho geral com números reais e comparação com período anterior]
+
+🏆 *Destaque da semana*
+[Identifique o conteúdo com melhor performance — cite o título/tema do post, o alcance/visualizações e por que performou bem]
+
+📈 *O que está funcionando*
+• [métrica positiva com número e % de variação]
+• [outra métrica positiva]
+
+⚠️ *Ponto de atenção*
+• [métrica ou comportamento que precisa de cuidado, com número]
+
+💡 *Recomendação para a próxima semana*
+[1 ação específica e concreta baseada nos dados, não genérica]
+
+---
+QUANDO GERAR TEXTO PARA WHATSAPP:
+Escreva de forma mais informal e amigável, sem emojis em excesso, direto ao ponto. Máximo 5 parágrafos. Comece com algo positivo, mencione o destaque, aponte 1 ponto de atenção e feche com a recomendação.
+
+PARA OUTRAS PERGUNTAS: responda de forma direta e técnica, sempre baseado nos dados do PDF.`;
+
+  try{
+    const messages = [];
+    if(conversationHistory.length === 1){
+      messages.push({
+        role:'user',
+        content:[
+          {type:'document', source:{type:'base64', media_type:'application/pdf', data:pdfBase64}},
+          {type:'text', text: text}
+        ]
+      });
+    } else {
+      const first = conversationHistory[0];
+      const histMsgs = [{
+        role:'user',
+        content:[
+          {type:'document', source:{type:'base64', media_type:'application/pdf', data:pdfBase64}},
+          {type:'text', text: first.content}
+        ]
+      }];
+      for(let i=1; i<conversationHistory.length; i++){
+        histMsgs.push(conversationHistory[i]);
+      }
+      messages.push(...histMsgs);
     }
+
+    const r = await fetch('/api/reportei', {
+      method:'POST',
+      headers:{
+        'Authorization':'Bearer '+SESSION_TOKEN,
+        'Content-Type':'application/json',
+        'x-action':'claude-chat'
+      },
+      body: JSON.stringify({system: systemPrompt, messages})
+    });
+    const d = await r.json();
+    const reply = d.content && d.content[0] ? d.content[0].text : 'Não consegui processar o relatório.';
+    conversationHistory.push({role:'assistant', content: reply});
+    removeThinking();
+
+    const isInsight = text.toLowerCase().includes('insight') || text.toLowerCase().includes('relatório') || text.toLowerCase().includes('relatorio') || text.toLowerCase().includes('análise');
+    const isWhatsapp = text.toLowerCase().includes('whatsapp') || text.toLowerCase().includes('mensagem');
+
+    let html = reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>');
+
+    if(isInsight || isWhatsapp){
+      const card = `<div class="insight-card">
+        <div class="ic-header">${isWhatsapp ? '💬 texto para whatsapp' : '📋 análise sbot'}</div>
+        <div class="ic-body">${html}</div>
+        <button class="copy-btn" onclick="copyText(this)">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          copiar texto
+        </button>
+      </div>`;
+      addMsgRaw('bot', card);
+    } else {
+      addMsgRaw('bot', html);
+    }
+  }catch(e){
+    removeThinking();
+    addMsg('bot','Erro ao processar. Tente novamente.');
   }
+}
 
-  const metricsHTML=buildMetricsHTML(integrations,metricsData,metricsMeta);
-  const aiInsight=await buildAIInsight(project.name,integrations,metricsData,metricsMeta,start,end);
+function addMsgRaw(role, html){
+  const wrap = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg '+role;
+  const av = document.createElement('div');
+  av.className = 'av '+role;
+  av.textContent = role==='bot'?'B':'vc';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = html;
+  div.appendChild(av); div.appendChild(bubble);
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
 
-  removeThinking();
-
-  let html='<strong>'+project.name+'</strong><br><small style="color:#888">'+start+' a '+end+'</small>';
-  if(metricsHTML) html+='<br><br>'+metricsHTML;
-  if(aiInsight) html+='<hr class="divider"><div class="section-title">Análise SBot</div>'+aiInsight.replace(/\n/g,'<br>');
-  if(!metricsHTML&&!aiInsight) html+='<br><br>Não encontrei dados para esse período.';
-
-  addMsg('bot',html);
+function copyText(btn){
+  const card = btn.closest('.insight-card');
+  const body = card.querySelector('.ic-body');
+  const text = body.innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = '✓ copiado!';
+    setTimeout(()=>{ btn.innerHTML = '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> copiar texto'; }, 2000);
+  });
 }
 </script>
 </body>
