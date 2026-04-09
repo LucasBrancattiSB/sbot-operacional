@@ -293,7 +293,7 @@ async function buildAIInsight(clientName, integrations, metricsData, start, end)
   }catch(e){return null}
 }
 
-function buildMetricsHTML(integrations, metricsData){
+function buildMetricsHTML(integrations, metricsData, metricsMeta){
   let html='';
   for(const integ of integrations){
     const mdata=metricsData[integ.id];
@@ -303,7 +303,7 @@ function buildMetricsHTML(integrations, metricsData){
       if(!val||val.values===undefined) continue;
       const diff=val.comparison?val.comparison.difference:0;
       const cls=diff>2?'up':diff<-2?'down':'neutral';
-      html+='<div class="metric-row"><span>'+labelForKey(id)+'</span><span class="'+cls+'">'+fmt(val.values)+' <small>'+fmtDiff(diff/100)+'</small></span></div>';
+      const lbl = (metricsMeta&&metricsMeta[id])?labelForKey(metricsMeta[id]):labelForKey(id); if(isNaN(val.values)||val.values===nul100)+'</small></span></div>';
     }
   }
   return html;
@@ -353,16 +353,16 @@ async function processMsg(text){
   }
 
   const {start,end}=getDates();
-  const metricsData={};
+  const metricsData={}; const metricsMeta={};
   for(const integ of integrations.slice(0,3)){
     const allMetrics=await getMetricsList(integ.slug);
     if(!allMetrics.length) continue;
     const selected=pickMetrics(allMetrics);
     const data=await getMetricData(integ.id,selected,start,end);
-    if(data) metricsData[integ.id]=data;
+    if(data){metricsData[integ.id]=data; selected.forEach(m=>{if(m.id)metricsMeta[m.id]=m.reference_key||m.id;});}
   }
 
-  const metricsHTML=buildMetricsHTML(integrations,metricsData);
+  const metricsHTML=buildMetricsHTML(integrations,metricsData,metricsMeta);
   const aiInsight=await buildAIInsight(project.name,integrations,metricsData,start,end);
 
   removeThinking();
