@@ -17,6 +17,7 @@
 body { font-family: var(--font); background: var(--black); color: var(--white); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
 #app { width: 100%; max-width: 720px; height: 92vh; max-height: 860px; background: var(--black2); border: 1px solid var(--border2); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 #app::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--yellow), transparent); border-radius: 20px 20px 0 0; }
+
 #header { padding: 13px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 #logo-img { height: 24px; width: auto; display: block; }
 #header-divider { width: 1px; height: 18px; background: var(--border2); flex-shrink: 0; }
@@ -51,17 +52,30 @@ body { font-family: var(--font); background: var(--black); color: var(--white); 
 #pdf-badge { display: none; align-items: center; gap: 6px; background: rgba(245,230,66,.08); border: 1px solid var(--border2); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-family: var(--mono); color: var(--yellow); }
 #pdf-input { display: none; }
 
-/* TOOLBAR */
-#toolbar { padding: 10px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-#gen-btn { height: 36px; padding: 0 20px; background: var(--yellow); border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); color: var(--black); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
+/* TOOLBAR — duas linhas */
+#toolbar { padding: 10px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* linha 1: gerar + períodos */
+#toolbar-top { display: flex; align-items: center; gap: 8px; }
+
+#gen-btn { height: 36px; padding: 0 18px; background: var(--yellow); border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); color: var(--black); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; }
 #gen-btn:hover { background: var(--yellow2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,230,66,.2); }
 #gen-btn:active { transform: translateY(0); box-shadow: none; }
+
 .tool-divider { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
-.period-btn { height: 30px; padding: 0 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; }
-.period-btn.active { border-color: var(--yellow); color: var(--yellow); background: rgba(245,230,66,.08); }
-.period-btn:hover { border-color: var(--yellow); color: var(--yellow); }
-.quick-btn { height: 30px; padding: 0 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; white-space: nowrap; }
-.quick-btn:hover { color: var(--white); background: var(--black3); }
+
+/* período — segmented control */
+#period-group { display: flex; background: var(--black3); border: 1px solid var(--border2); border-radius: 8px; padding: 3px; gap: 2px; }
+.period-btn { height: 28px; padding: 0 14px; background: transparent; border: none; border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; white-space: nowrap; }
+.period-btn.active { background: var(--yellow); color: var(--black); font-weight: 600; }
+.period-btn:not(.active):hover { color: var(--white); }
+
+/* linha 2: botões de ação */
+#toolbar-bottom { display: flex; align-items: center; gap: 6px; }
+.action-label { font-size: 10px; font-family: var(--mono); color: var(--gray2); letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; }
+.quick-btn { height: 28px; padding: 0 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+.quick-btn:hover { color: var(--white); background: var(--black3); border-color: var(--border2); }
+.quick-btn svg { opacity: .6; }
 
 /* MESSAGES */
 #messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; scrollbar-color: var(--gray2) transparent; }
@@ -137,19 +151,33 @@ body { font-family: var(--font); background: var(--black); color: var(--white); 
     </div>
 
     <div id="toolbar">
-      <button id="gen-btn" onclick="generateInsight()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Gerar insights
-      </button>
-      <div class="tool-divider"></div>
-      <button class="period-btn active" onclick="setPeriod(this,'semana')">Semana</button>
-      <button class="period-btn" onclick="setPeriod(this,'15 dias')">15 dias</button>
-      <button class="period-btn" onclick="setPeriod(this,'mês')">Mês</button>
-      <div class="tool-divider"></div>
-      <button class="quick-btn" onclick="quickAsk('qual foi o melhor post do período?')">Melhor post</button>
-      <button class="quick-btn" onclick="quickAsk('quais são os principais pontos de atenção?')">Atenção</button>
-      <button class="quick-btn" onclick="quickAsk('o que podemos melhorar na estratégia?')">Melhorar</button>
-      <button class="quick-btn" onclick="quickAsk('gerar versão interna com pontos críticos para o time')">Interno</button>
+      <div id="toolbar-top">
+        <button id="gen-btn" onclick="generateInsight()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Gerar insights
+        </button>
+        <div class="tool-divider"></div>
+        <div id="period-group">
+          <button class="period-btn active" onclick="setPeriod(this,'7 dias')">7 dias</button>
+          <button class="period-btn" onclick="setPeriod(this,'15 dias')">15 dias</button>
+          <button class="period-btn" onclick="setPeriod(this,'mês')">Mês</button>
+        </div>
+      </div>
+      <div id="toolbar-bottom">
+        <span class="action-label">perguntar →</span>
+        <button class="quick-btn" onclick="quickAsk('qual foi o melhor post do período? explique por que ele performou bem')">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Melhor post
+        </button>
+        <button class="quick-btn" onclick="quickAsk('o que podemos melhorar na estratégia de conteúdo com base nos dados?')">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Melhorias
+        </button>
+        <button class="quick-btn" onclick="quickAsk('gerar versão interna com diagnóstico técnico e pontos críticos para o time')">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Interno
+        </button>
+      </div>
     </div>
 
     <div id="messages"></div>
@@ -170,7 +198,7 @@ const AVATAR = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0
 const CORRECT_PASSWORD = 'quebratudo';
 let pdfBase64 = sessionStorage.getItem('sb_pdf_b64') || null;
 let pdfName = sessionStorage.getItem('sb_pdf_name') || null;
-let currentPeriod = 'semana';
+let currentPeriod = '7 dias';
 let history = [];
 let authenticated = sessionStorage.getItem('sb_auth') === '1';
 
@@ -183,8 +211,8 @@ function checkPassword(){
     authenticated = true;
     initMain();
   } else {
-    document.getElementById('pass-error').style.display = 'block';
-    document.getElementById('pass-field').value = '';
+    document.getElementById('pass-error').style.display='block';
+    document.getElementById('pass-field').value='';
     document.getElementById('pass-field').focus();
   }
 }
@@ -196,12 +224,11 @@ function initMain(){
   document.getElementById('status-txt').textContent='online';
   document.getElementById('logout-btn').style.display='inline-flex';
   if(pdfName) showPdfBadge(pdfName);
-  addMsg('bot','Olá! Bem-vindo ao <strong>SBot Operacional</strong>.<br><br>Suba o PDF do relatório semanal do Reportei e clique em <strong>Gerar insights</strong> para começar.');
+  addMsg('bot','Olá! Bem-vindo ao <strong>SBot Operacional</strong>.<br><br>Suba o PDF do relatório do Reportei, selecione o período e clique em <strong>Gerar insights</strong>.');
 }
 
 function logout(){
-  authenticated = false;
-  pdfBase64 = null; pdfName = null; history = [];
+  authenticated=false; pdfBase64=null; pdfName=null; history=[];
   sessionStorage.clear();
   document.getElementById('main').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -244,7 +271,7 @@ function showPdfBadge(name){
 }
 
 function generateInsight(){
-  const label = {'semana':'da semana','15 dias':'dos últimos 15 dias','mês':'do mês'}[currentPeriod]||'do período';
+  const label = {'7 dias':'dos últimos 7 dias','15 dias':'dos últimos 15 dias','mês':'do mês'}[currentPeriod]||'do período';
   addMsg('user','Gerar insights completos '+label);
 }
 
@@ -302,54 +329,53 @@ async function processMsg(text){
 
   const isInterno = /interno|time|equipe/i.test(text);
   const isWhatsapp = /whatsapp|mensagem para|mensagem pra/i.test(text);
-  const periodLabel = {'semana':'semana','15 dias':'últimos 15 dias','mês':'mês completo'}[currentPeriod]||'período';
+  const periodLabel = {'7 dias':'últimos 7 dias','15 dias':'últimos 15 dias','mês':'mês completo'}[currentPeriod]||'período';
 
-  const systemPrompt = `Você é o SBot, analista sênior de social media da SB Marketing — agência com squads nichados de alta performance. A SB tem cultura forte, direta e próxima dos clientes.
+  const systemPrompt = `Você é o SBot, analista sênior de social media da SB Marketing — agência com squads nichados de alta performance.
 
 PERÍODO ANALISADO: ${periodLabel}
 
-MISSÃO: Transformar dados de redes sociais em análises que o cliente entenda com facilidade e que posicionem a SB como referência. O cliente geralmente não lê relatório — então o SBot precisa "mastigar" tudo e entregar de forma didática, com exemplos e metáforas quando ajudar a entender.
+MISSÃO: Transformar dados de redes sociais em análises que o cliente entenda com facilidade. O cliente geralmente não lê relatório — o SBot precisa "mastigar" tudo e entregar de forma didática, com exemplos e metáforas quando ajudar.
 
-TOM E LINGUAGEM:
-- Didático: ao citar uma métrica importante, explique o que ela significa na prática
-- Use metáforas e comparações do cotidiano para dar dimensão aos números quando fizer sentido
-- Profissional e próximo: especialista que fala de forma humana, sem jargão desnecessário
-- Direto: sem enrolação, sem frases genéricas
-- Confiante: mostre domínio técnico com clareza
-- Evite: "extraordinário", "explosão", "incrível", "espetacular", "excelente resultado"
+TOM:
+- Didático: explique métricas em linguagem simples quando relevante
+- Use metáforas para dar dimensão aos números quando fizer sentido
+- Profissional e próximo, sem jargão desnecessário
+- Direto, sem enrolação
+- Evite: "extraordinário", "explosão", "incrível", "espetacular"
 - Cite sempre números reais do relatório
 
 MODO CLIENTE (padrão):
-📊 *Panorama do ${periodLabel}*
-[Visão geral com números reais. Use metáfora para dar dimensão ao alcance quando fizer sentido.]
+📊 *Panorama dos ${periodLabel}*
+[Visão geral com números reais e comparação com período anterior.]
 
 🏆 *Destaque do período*
-[Melhor conteúdo: cite título ou tema, número de alcance/visualizações, e explique por que funcionou.]
+[Melhor conteúdo: cite título/tema, número de alcance/visualizações, explique por que funcionou.]
 
 📈 *O que está funcionando*
-• [ponto positivo com número e contexto didático]
+• [ponto positivo com número e contexto]
 • [outro ponto positivo]
 
 ⚠️ *Para ficar de olho*
-• [ponto de atenção com número — sem alarmismo, com orientação construtiva]
+• [ponto de atenção com número e orientação construtiva]
 
-💡 *Recomendação para o próximo ${periodLabel}*
+💡 *Recomendação*
 [1 ação concreta e específica baseada nos dados.]
 
 ---
-MODO INTERNO (palavras-chave: "interno", "para o time", "equipe"):
+MODO INTERNO (palavras-chave: "interno", "time", "equipe"):
 🔍 *Diagnóstico técnico — ${periodLabel}*
-[Análise completa incluindo quedas e inconsistências]
+[Análise completa sem filtro]
 ⚠️ *Pontos críticos*
 • [problema com número]
 📋 *Ajustes recomendados*
-• [ação técnica para o time]
+• [ação para o time]
 📌 *Como apresentar ao cliente*
-[Como comunicar os pontos negativos de forma construtiva]
+[Como comunicar os negativos de forma construtiva]
 
 ---
-MODO WHATSAPP (palavras-chave: "whatsapp", "mensagem para", "mensagem pra"):
-Tom informal. Sem markdown. Máximo 5 parágrafos curtos. Primeira pessoa do plural. Comece positivo, mencione o destaque, aponte 1 ponto de atenção levemente, feche com próximos passos.
+MODO WHATSAPP (palavras-chave: "whatsapp", "mensagem"):
+Tom informal. Sem markdown. Máximo 5 parágrafos. Primeira pessoa do plural. Começa positivo, menciona destaque, aponta 1 ponto levemente, fecha com próximos passos.
 
 PARA OUTRAS PERGUNTAS: responda direto, baseado nos dados do PDF.`;
 
@@ -380,7 +406,7 @@ PARA OUTRAS PERGUNTAS: responda direto, baseado nos dados do PDF.`;
     history.push({role:'assistant',content:reply});
     removeThinking();
 
-    const isCard = /insight|anali|panorama|relatório|relatorio|destaque|semana|mês|período|post|atenção|melhorar|interno/i.test(text);
+    const isCard = /insight|anali|panorama|relatório|relatorio|destaque|dias|mês|período|post|melhor|melhor|melhor|interno/i.test(text);
 
     let html = reply
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
