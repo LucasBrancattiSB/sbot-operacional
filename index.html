@@ -3,172 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBot — SB Marketing</title>
+<title>SBot Operacional — SB Marketing</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #0a0a0a;
-  --black2: #111111;
-  --black3: #1a1a1a;
-  --yellow: #F5E642;
-  --yellow2: #e6d800;
-  --white: #f0f0ee;
-  --gray: #888880;
-  --gray2: #2a2a28;
-  --border: rgba(245,230,66,.10);
-  --border2: rgba(245,230,66,.22);
-  --font: 'Space Grotesk', sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
+  --black: #0a0a0a; --black2: #111111; --black3: #1a1a1a;
+  --yellow: #F5E642; --yellow2: #e6d800;
+  --white: #f0f0ee; --gray: #888880; --gray2: #2a2a28;
+  --border: rgba(245,230,66,.10); --border2: rgba(245,230,66,.22);
+  --font: 'Space Grotesk', sans-serif; --mono: 'IBM Plex Mono', monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: var(--font);
-  background: var(--black);
-  color: var(--white);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-#app {
-  width: 100%;
-  max-width: 720px;
-  height: 92vh;
-  max-height: 820px;
-  background: var(--black2);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-}
-#app::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--yellow), transparent);
-  border-radius: 20px 20px 0 0;
-}
-#header {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 14px;
-  flex-shrink: 0;
-}
-#logo-img { height: 26px; width: auto; display: block; }
-#header-divider {
-  width: 1px; height: 20px;
-  background: var(--border2);
-  flex-shrink: 0;
-}
-#header-label {
-  font-size: 12px; color: var(--gray);
-  font-family: var(--mono);
-  letter-spacing: .02em;
-}
+body { font-family: var(--font); background: var(--black); color: var(--white); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+#app { width: 100%; max-width: 720px; height: 92vh; max-height: 860px; background: var(--black2); border: 1px solid var(--border2); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+#app::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--yellow), transparent); border-radius: 20px 20px 0 0; }
+
+/* HEADER */
+#header { padding: 13px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+#logo-img { height: 24px; width: auto; display: block; }
+#header-divider { width: 1px; height: 18px; background: var(--border2); flex-shrink: 0; }
+#header-label { font-size: 12px; color: var(--gray); font-family: var(--mono); }
 #header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--gray); font-family: var(--mono); }
-#status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade8066; }
-#upload-area { padding: 10px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-#upload-label {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  border: 1px dashed var(--border2);
-  border-radius: 10px; cursor: pointer;
-  font-size: 12px; color: var(--gray);
-  transition: all .2s;
-}
-#upload-label:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(245,230,66,.03); }
+#status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray2); transition: all .3s; }
+#status-dot.online { background: #4ade80; box-shadow: 0 0 6px #4ade8066; }
+
+/* TOKEN SCREEN */
+#token-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; gap: 18px; }
+#token-screen h2 { font-size: 17px; font-weight: 600; }
+#token-screen p { font-size: 13px; color: var(--gray); text-align: center; line-height: 1.6; max-width: 300px; }
+#token-wrap { display: flex; gap: 8px; width: 100%; max-width: 400px; }
+#token-field { flex: 1; height: 40px; background: var(--black3); border: 1px solid var(--border2); border-radius: 8px; padding: 0 14px; font-size: 13px; font-family: var(--mono); color: var(--white); outline: none; }
+#token-field:focus { border-color: var(--yellow); }
+#token-btn { height: 40px; padding: 0 20px; background: var(--yellow); border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); color: var(--black); cursor: pointer; white-space: nowrap; }
+#token-btn:hover { background: var(--yellow2); }
+#token-btn:disabled { opacity: .5; cursor: not-allowed; }
+#token-error { font-size: 12px; color: #f87171; display: none; font-family: var(--mono); }
+#token-hint { font-size: 11px; color: var(--gray2); font-family: var(--mono); }
+
+/* MAIN */
+#main { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+
+/* SOURCE AREA */
+#source-area { padding: 10px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+#source-tabs { display: flex; gap: 4px; }
+.src-tab { height: 28px; padding: 0 14px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; }
+.src-tab.active { background: rgba(245,230,66,.1); border-color: var(--yellow); color: var(--yellow); }
+#source-pdf { display: flex; }
+#source-link { display: none; }
+#upload-label { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border: 1px dashed var(--border2); border-radius: 10px; cursor: pointer; font-size: 12px; color: var(--gray); transition: all .2s; flex: 1; }
+#upload-label:hover { border-color: var(--yellow); color: var(--yellow); }
 #upload-txt { flex: 1; }
-#pdf-badge {
-  display: none; align-items: center; gap: 6px;
-  background: rgba(245,230,66,.08);
-  border: 1px solid var(--border2);
-  border-radius: 6px; padding: 3px 10px;
-  font-size: 11px; font-family: var(--mono); color: var(--yellow);
-}
+#pdf-badge { display: none; align-items: center; gap: 6px; background: rgba(245,230,66,.08); border: 1px solid var(--border2); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-family: var(--mono); color: var(--yellow); }
 #pdf-input { display: none; }
-#toolbar { padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-#gen-btn {
-  height: 40px; padding: 0 24px;
-  background: var(--yellow); border: none; border-radius: 10px;
-  font-size: 13px; font-weight: 700; font-family: var(--font);
-  color: var(--black); cursor: pointer;
-  transition: all .15s;
-  display: inline-flex; align-items: center; gap: 8px;
-  letter-spacing: -.01em;
-}
+#link-wrap { display: flex; gap: 8px; flex: 1; }
+#dashboard-field { flex: 1; height: 38px; background: var(--black3); border: 1px solid var(--border2); border-radius: 8px; padding: 0 12px; font-size: 12px; font-family: var(--mono); color: var(--white); outline: none; }
+#dashboard-field:focus { border-color: var(--yellow); }
+#dashboard-field::placeholder { color: var(--gray); }
+#link-btn { height: 38px; padding: 0 14px; background: transparent; border: 1px solid var(--border2); border-radius: 8px; font-size: 12px; font-family: var(--mono); color: var(--yellow); cursor: pointer; white-space: nowrap; }
+#link-btn:hover { background: rgba(245,230,66,.08); }
+
+/* TOOLBAR */
+#toolbar { padding: 10px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#gen-btn { height: 36px; padding: 0 20px; background: var(--yellow); border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: var(--font); color: var(--black); cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: 7px; }
 #gen-btn:hover { background: var(--yellow2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,230,66,.2); }
-#gen-btn:active { transform: translateY(0); box-shadow: none; }
-#messages {
-  flex: 1; overflow-y: auto; padding: 20px 16px;
-  display: flex; flex-direction: column; gap: 16px;
-  scrollbar-width: thin; scrollbar-color: var(--gray2) transparent;
-}
+.tool-divider { width: 1px; height: 20px; background: var(--border2); }
+.period-btn { height: 30px; padding: 0 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; }
+.period-btn.active { border-color: var(--yellow); color: var(--yellow); background: rgba(245,230,66,.08); }
+.period-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.quick-btn { height: 30px; padding: 0 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; }
+.quick-btn:hover { border-color: var(--border2); color: var(--white); background: var(--black3); }
+#logout-btn { margin-left: auto; height: 28px; padding: 0 10px; background: transparent; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; font-family: var(--mono); color: var(--gray2); cursor: pointer; }
+#logout-btn:hover { color: #f87171; border-color: #f87171; }
+
+/* MESSAGES */
+#messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; scrollbar-color: var(--gray2) transparent; }
 .msg { display: flex; gap: 10px; align-items: flex-start; }
 .msg.user { flex-direction: row-reverse; }
-.av {
-  width: 28px; height: 28px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
-  overflow: hidden;
-}
-.av.bot { background: var(--yellow); padding: 0; border: 2px solid var(--yellow); }
+.av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; margin-top: 2px; overflow: hidden; }
+.av.bot { border: 2px solid var(--yellow); }
 .av.bot img { width: 28px; height: 28px; object-fit: cover; border-radius: 50%; }
-.av.user { background: var(--black3); border: 1px solid var(--border2); color: var(--yellow); font-family: var(--mono); font-size: 9px; letter-spacing: -.02em; }
-.bubble {
-  max-width: 82%; padding: 11px 14px;
-  font-size: 13px; line-height: 1.65; border-radius: 14px;
-}
+.av.user { background: var(--black3); border: 1px solid var(--border2); color: var(--yellow); font-family: var(--mono); }
+.bubble { max-width: 82%; padding: 11px 14px; font-size: 13px; line-height: 1.65; border-radius: 14px; }
 .msg.bot .bubble { background: var(--black3); border: 1px solid var(--border); border-radius: 4px 14px 14px 14px; color: var(--white); }
 .msg.user .bubble { background: var(--yellow); color: var(--black); border-radius: 14px 4px 14px 14px; font-weight: 500; }
 .thinking { display: flex; gap: 5px; align-items: center; padding: 12px 14px; }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--yellow); animation: pulse 1.4s infinite; }
 .dot:nth-child(2){animation-delay:.2s} .dot:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.3)}}
-#input-area {
-  padding: 12px 16px; border-top: 1px solid var(--border);
-  display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
-}
-#msg-input {
-  flex: 1; min-height: 40px; max-height: 120px;
-  background: var(--black3); border: 1px solid var(--border2);
-  border-radius: 10px; padding: 10px 14px;
-  font-size: 13px; font-family: var(--font);
-  color: var(--white); outline: none; resize: none; line-height: 1.5;
-}
+
+/* INPUT */
+#input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+#msg-input { flex: 1; min-height: 40px; max-height: 120px; background: var(--black3); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 14px; font-size: 13px; font-family: var(--font); color: var(--white); outline: none; resize: none; line-height: 1.5; }
 #msg-input:focus { border-color: var(--yellow); }
 #msg-input::placeholder { color: var(--gray); }
-#send-btn {
-  width: 40px; height: 40px;
-  background: var(--black3); border: 1px solid var(--border2);
-  border-radius: 10px; color: var(--yellow);
-  cursor: pointer; flex-shrink: 0; transition: all .15s;
-  display: flex; align-items: center; justify-content: center;
-}
+#send-btn { width: 40px; height: 40px; background: var(--black3); border: 1px solid var(--border2); border-radius: 10px; color: var(--yellow); cursor: pointer; flex-shrink: 0; transition: all .15s; display: flex; align-items: center; justify-content: center; }
 #send-btn:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
-.insight-card {
-  background: var(--black); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 18px; margin-top: 4px;
-  border-left: 3px solid var(--yellow);
-}
-.ic-header {
-  font-size: 10px; font-family: var(--mono);
-  color: var(--yellow); margin-bottom: 14px;
-  text-transform: uppercase; letter-spacing: .1em;
-  display: flex; align-items: center; gap: 6px;
-}
+
+/* CARDS */
+.insight-card { background: var(--black); border: 1px solid var(--border2); border-radius: 14px; padding: 18px; margin-top: 4px; border-left: 3px solid var(--yellow); }
+.ic-label { font-size: 10px; font-family: var(--mono); color: var(--yellow); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .1em; display: flex; align-items: center; gap: 6px; }
 .ic-body { font-size: 13px; line-height: 1.8; color: var(--white); }
 .ic-body strong { color: var(--yellow); font-weight: 600; }
-.copy-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 14px; padding: 8px 14px;
-  background: transparent; border: 1px solid var(--border2);
-  border-radius: 8px; font-size: 11px; font-family: var(--mono);
-  color: var(--gray); cursor: pointer; transition: all .15s;
-}
+.card-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.copy-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: transparent; border: 1px solid var(--border2); border-radius: 8px; font-size: 11px; font-family: var(--mono); color: var(--gray); cursor: pointer; transition: all .15s; }
 .copy-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.copy-wpp { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.3); border-radius: 8px; font-size: 11px; font-family: var(--mono); color: #4ade80; cursor: pointer; transition: all .15s; }
+.copy-wpp:hover { background: rgba(74,222,128,.15); }
 </style>
 </head>
 <body>
@@ -179,56 +119,145 @@ body {
     <span id="header-label">Análise de Insights Semanais</span>
     <div id="header-right">
       <div id="status-dot"></div>
-      <span>online</span>
+      <span id="status-txt">offline</span>
+      <span style="margin-left:8px;cursor:pointer;display:none" id="logout-btn" onclick="logout()">sair</span>
     </div>
   </div>
 
-  <div id="upload-area">
-    <label id="upload-label" for="pdf-input">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="12" y1="18" x2="12" y2="12"/>
-        <polyline points="9 15 12 12 15 15"/>
-      </svg>
-      <span id="upload-txt">Subir relatório PDF do Reportei</span>
-      <div id="pdf-badge">
-        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <span id="pdf-name-txt"></span>
+  <!-- TOKEN SCREEN -->
+  <div id="token-screen">
+    <div style="font-size:28px">🤖</div>
+    <h2>Acesso SBot Operacional</h2>
+    <p>Cole o token de API do Reportei para entrar. Salvo só nessa sessão.</p>
+    <div id="token-wrap">
+      <input id="token-field" type="password" placeholder="token do reportei..." onkeydown="if(event.key==='Enter')connectToken()">
+      <button id="token-btn" onclick="connectToken()">Entrar</button>
+    </div>
+    <span id="token-error">Token inválido. Verifique e tente novamente.</span>
+    <span id="token-hint">app.reportei.com → menu → API Reportei</span>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+    <!-- SOURCE -->
+    <div id="source-area">
+      <div id="source-tabs">
+        <button class="src-tab active" onclick="switchSource('pdf')">PDF</button>
+        <button class="src-tab" onclick="switchSource('link')">Link do Dashboard</button>
       </div>
-    </label>
-    <input type="file" id="pdf-input" accept=".pdf" onchange="handlePDF(this)">
-  </div>
+      <div id="source-pdf">
+        <label id="upload-label" for="pdf-input">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+          <span id="upload-txt">Subir relatório PDF do Reportei</span>
+          <div id="pdf-badge"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span id="pdf-name-txt"></span></div>
+        </label>
+        <input type="file" id="pdf-input" accept=".pdf" onchange="handlePDF(this)">
+      </div>
+      <div id="source-link">
+        <div id="link-wrap">
+          <input id="dashboard-field" type="url" placeholder="https://app.reportei.com/dashboard/...">
+          <button id="link-btn" onclick="loadDashboard()">Carregar</button>
+        </div>
+      </div>
+    </div>
 
-  <div id="toolbar">
-    <button id="gen-btn" onclick="dispatchMsg('gerar insights completos do relatório enviado')">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      Gerar insights
-    </button>
-  </div>
+    <!-- TOOLBAR -->
+    <div id="toolbar">
+      <button id="gen-btn" onclick="generateInsight()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Gerar insights
+      </button>
+      <div class="tool-divider"></div>
+      <button class="period-btn active" onclick="setPeriod(this,'semana')">Semana</button>
+      <button class="period-btn" onclick="setPeriod(this,'15 dias')">15 dias</button>
+      <button class="period-btn" onclick="setPeriod(this,'mês')">Mês</button>
+      <div class="tool-divider"></div>
+      <button class="quick-btn" onclick="quickAsk('qual foi o melhor post do período?')">Melhor post</button>
+      <button class="quick-btn" onclick="quickAsk('quais são os principais pontos de atenção?')">Atenção</button>
+      <button class="quick-btn" onclick="quickAsk('o que podemos melhorar na estratégia?')">Melhorar</button>
+      <button class="quick-btn" onclick="quickAsk('gerar versão interna com pontos críticos para o time')">Interno</button>
+    </div>
 
-  <div id="messages"></div>
+    <div id="messages"></div>
 
-  <div id="input-area">
-    <textarea id="msg-input" placeholder="Pergunte sobre o relatório..." rows="1"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
-      oninput="this.style.height='40px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
-    <button id="send-btn" onclick="sendMsg()">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-    </button>
+    <div id="input-area">
+      <textarea id="msg-input" placeholder="Pergunte sobre o relatório..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+        oninput="this.style.height='40px';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+      <button id="send-btn" onclick="sendMsg()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
 const AVATAR = 'data:image/png;base64,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';
+let SESSION_TOKEN = sessionStorage.getItem('sb_token') || null;
 let pdfBase64 = sessionStorage.getItem('sb_pdf_b64') || null;
 let pdfName = sessionStorage.getItem('sb_pdf_name') || null;
+let dashboardData = null;
+let currentPeriod = 'semana';
 let history = [];
+let sourceMode = 'pdf';
 
-window.onload = () => {
+if(SESSION_TOKEN) initMain();
+
+async function connectToken(){
+  const val = document.getElementById('token-field').value.trim();
+  if(!val) return;
+  const btn = document.getElementById('token-btn');
+  btn.textContent = 'Verificando...'; btn.disabled = true;
+  document.getElementById('token-error').style.display = 'none';
+  try{
+    const r = await fetch('/api/reportei?path='+encodeURIComponent('/companies/settings'),{headers:{'Authorization':'Bearer '+val}});
+    if(!r.ok) throw new Error();
+    const data = await r.json();
+    SESSION_TOKEN = val;
+    sessionStorage.setItem('sb_token', val);
+    initMain(data.company);
+  }catch(e){
+    document.getElementById('token-error').style.display='block';
+    btn.textContent='Entrar'; btn.disabled=false;
+  }
+}
+
+function initMain(company){
+  document.getElementById('token-screen').style.display='none';
+  document.getElementById('main').style.display='flex';
+  document.getElementById('status-dot').classList.add('online');
+  document.getElementById('status-txt').textContent='online';
+  document.getElementById('logout-btn').style.display='inline';
   if(pdfName) showPdfBadge(pdfName);
-  addMsg('bot', 'Olá! Sou o <strong>SBot</strong>, seu analista de marketing digital da SB Marketing.<br><br>Suba o PDF do relatório semanal do Reportei e clique em <strong>Gerar insights</strong> para começar.');
-};
+  const name = company ? company.name : 'SB Marketing';
+  addMsg('bot','Olá! Conectado como <strong>'+name+'</strong>.<br><br>Suba o PDF do relatório ou cole o link do dashboard do Reportei. Depois clique em <strong>Gerar insights</strong>.');
+}
+
+function logout(){
+  SESSION_TOKEN = null; pdfBase64 = null; pdfName = null; dashboardData = null; history = [];
+  sessionStorage.clear();
+  document.getElementById('main').style.display='none';
+  document.getElementById('token-screen').style.display='flex';
+  document.getElementById('status-dot').classList.remove('online');
+  document.getElementById('status-txt').textContent='offline';
+  document.getElementById('logout-btn').style.display='none';
+  document.getElementById('token-btn').textContent='Entrar';
+  document.getElementById('token-btn').disabled=false;
+  document.getElementById('messages').innerHTML='';
+}
+
+function switchSource(mode){
+  sourceMode = mode;
+  document.querySelectorAll('.src-tab').forEach((t,i)=>t.classList.toggle('active', (mode==='pdf'&&i===0)||(mode==='link'&&i===1)));
+  document.getElementById('source-pdf').style.display = mode==='pdf'?'flex':'none';
+  document.getElementById('source-link').style.display = mode==='link'?'flex':'none';
+}
+
+function setPeriod(btn, period){
+  currentPeriod = period;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
 
 function handlePDF(input){
   const file = input.files[0];
@@ -237,172 +266,193 @@ function handlePDF(input){
   reader.onload = e => {
     pdfBase64 = e.target.result.split(',')[1];
     pdfName = file.name;
+    dashboardData = null;
     history = [];
     sessionStorage.setItem('sb_pdf_b64', pdfBase64);
     sessionStorage.setItem('sb_pdf_name', pdfName);
     showPdfBadge(pdfName);
-    addMsg('bot','PDF <strong>'+file.name+'</strong> carregado. Clique em <strong>Gerar insights</strong> ou faça uma pergunta sobre o relatório.');
+    addMsg('bot','PDF <strong>'+file.name+'</strong> carregado. Clique em <strong>Gerar insights</strong> ou faça uma pergunta.');
   };
   reader.readAsDataURL(file);
 }
 
 function showPdfBadge(name){
-  document.getElementById('upload-txt').style.display = 'none';
-  document.getElementById('pdf-badge').style.display = 'flex';
-  document.getElementById('pdf-name-txt').textContent = name.length > 32 ? name.substring(0,30)+'...' : name;
+  document.getElementById('upload-txt').style.display='none';
+  document.getElementById('pdf-badge').style.display='flex';
+  document.getElementById('pdf-name-txt').textContent = name.length>32?name.substring(0,30)+'...':name;
 }
 
-function dispatchMsg(text){ addMsg('user', text); }
+async function loadDashboard(){
+  const url = document.getElementById('dashboard-field').value.trim();
+  if(!url) return;
+  const match = url.match(/dashboard\/([a-zA-Z0-9]+)/);
+  if(!match){ addMsg('bot','Link inválido. Use o formato: https://app.reportei.com/dashboard/ID'); return; }
+  const id = match[1];
+  addMsg('user','Carregar dashboard: '+url);
+  showThinking();
+  try{
+    const r = await fetch('/api/reportei?path='+encodeURIComponent('/dashboards/'+id),{headers:{'Authorization':'Bearer '+SESSION_TOKEN}});
+    if(!r.ok) throw new Error();
+    const data = await r.json();
+    dashboardData = data;
+    pdfBase64 = null;
+    history = [];
+    removeThinking();
+    addMsg('bot','Dashboard <strong>'+(data.dashboard?.title||id)+'</strong> carregado. Clique em <strong>Gerar insights</strong>.');
+  }catch(e){
+    removeThinking();
+    addMsg('bot','Não consegui acessar esse dashboard. Verifique o link ou tente pelo PDF.');
+  }
+}
 
+function generateInsight(){
+  const periodLabel = {'semana':'da semana','15 dias':'dos últimos 15 dias','mês':'do mês'}[currentPeriod]||'do período';
+  addMsg('user','Gerar insights completos '+periodLabel);
+}
+
+function quickAsk(text){ addMsg('user', text); }
 function sendMsg(){
   const inp = document.getElementById('msg-input');
   const txt = inp.value.trim();
   if(!txt) return;
-  inp.value = ''; inp.style.height = '40px';
+  inp.value=''; inp.style.height='40px';
   addMsg('user', txt);
 }
 
 function makeAv(role){
-  const av = document.createElement('div');
-  av.className = 'av '+role;
-  if(role==='bot'){
-    const img = document.createElement('img');
-    img.src = AVATAR; img.alt = 'SBot';
-    av.appendChild(img);
-  } else {
-    av.textContent = 'SB';
-  }
+  const av = document.createElement('div'); av.className='av '+role;
+  if(role==='bot'){ const img=document.createElement('img'); img.src=AVATAR; img.alt='SBot'; av.appendChild(img); }
+  else { av.textContent='SB'; }
   return av;
 }
 
 function addMsg(role, text){
-  const wrap = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg '+role;
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.innerHTML = text;
-  div.appendChild(makeAv(role));
-  div.appendChild(bubble);
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
+  const wrap=document.getElementById('messages');
+  const div=document.createElement('div'); div.className='msg '+role;
+  const bubble=document.createElement('div'); bubble.className='bubble'; bubble.innerHTML=text;
+  div.appendChild(makeAv(role)); div.appendChild(bubble);
+  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
   if(role==='user') processMsg(text);
 }
 
 function addMsgRaw(role, html){
-  const wrap = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg '+role;
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.innerHTML = html;
-  div.appendChild(makeAv(role));
-  div.appendChild(bubble);
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
+  const wrap=document.getElementById('messages');
+  const div=document.createElement('div'); div.className='msg '+role;
+  const bubble=document.createElement('div'); bubble.className='bubble'; bubble.innerHTML=html;
+  div.appendChild(makeAv(role)); div.appendChild(bubble);
+  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
 }
 
 function showThinking(){
-  const wrap = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'msg bot'; div.id = 'thinking-msg';
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble thinking';
-  bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  div.appendChild(makeAv('bot'));
-  div.appendChild(bubble);
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
+  const wrap=document.getElementById('messages');
+  const div=document.createElement('div'); div.className='msg bot'; div.id='thinking-msg';
+  const b=document.createElement('div'); b.className='bubble thinking';
+  b.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  div.appendChild(makeAv('bot')); div.appendChild(b);
+  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
 }
-
-function removeThinking(){
-  const t = document.getElementById('thinking-msg');
-  if(t) t.remove();
-}
+function removeThinking(){ const t=document.getElementById('thinking-msg'); if(t)t.remove(); }
 
 async function processMsg(text){
-  if(!pdfBase64){
+  if(!pdfBase64 && !dashboardData){
     showThinking();
-    setTimeout(()=>{ removeThinking(); addMsg('bot','Primeiro suba o PDF do relatório usando o campo acima.'); }, 400);
+    setTimeout(()=>{ removeThinking(); addMsg('bot','Primeiro suba o PDF ou carregue o link do dashboard.'); },400);
     return;
   }
   showThinking();
 
-  const systemPrompt = `Você é o SBot, analista sênior de marketing digital da SB Marketing — agência com squads nichados de alta performance. A SB tem uma cultura forte, direta e descolada — o bordão interno é "Quebra Tudo", que representa a mentalidade de superar resultados e ir além do esperado.
+  const isInterno = /interno|time|equipe/i.test(text);
+  const isWhatsapp = /whatsapp|mensagem para|mensagem pra/i.test(text);
+  const periodLabel = {'semana':'semana','15 dias':'últimos 15 dias','mês':'mês completo'}[currentPeriod]||'período';
 
-MISSÃO: Analisar relatórios do Reportei e transformar dados em insights que o cliente entenda com facilidade e que mostrem que a SB domina o que faz.
+  const systemPrompt = `Você é o SBot, analista sênior de social media da SB Marketing — agência com squads nichados de alta performance. A SB tem cultura forte, direta e próxima dos clientes.
 
-LINGUAGEM E TOM:
-- Didático e acessível: explique o que cada métrica significa quando relevante, como se o cliente não soubesse (ex: "O alcance — quantidade de pessoas únicas que viram o conteúdo — cresceu 23%")
-- Profissional e próximo ao mesmo tempo: como um especialista que fala de forma humana, não robótica
-- Direto: sem rodeios, sem enrolação
-- Confiante: mostre domínio técnico com clareza, não com jargão
-- Evite: "extraordinário", "explosão", "incrível", "espetacular", "impressionante"
-- Use quando fizer sentido: expressões que mostram que a agência está atenta e engajada. O cliente deve sentir que tem um time dedicado analisando os dados dele
+PERÍODO ANALISADO: ${periodLabel}
+
+MISSÃO: Transformar dados de redes sociais em análises que o cliente entenda com facilidade e que posicionem a SB como referência. O cliente geralmente não lê relatório — então o SBot precisa "mastigar" tudo e entregar de forma didática, com exemplos e metáforas quando ajudar a entender.
+
+TOM E LINGUAGEM:
+- Didático e acessível: quando citar uma métrica, explique o que ela significa na prática
+  Ex: "O alcance — número de pessoas únicas que viram o conteúdo — foi de 24.900, o equivalente a lotar mais de 6 vezes o Estádio Municipal de uma cidade pequena"
+- Use metáforas e comparações do cotidiano para dar dimensão aos números
+- Profissional mas próximo: como um especialista que fala de forma humana, sem jargão desnecessário
+- Direto: sem enrolação, sem frases genéricas como "é importante analisar os dados"
+- Confiante: mostre domínio técnico com clareza
+- Evite: "extraordinário", "explosão", "incrível", "espetacular", "excelente resultado"
 - Cite sempre números reais do relatório
 
-QUANDO GERAR INSIGHTS COMPLETOS:
+DOIS MODOS DE ANÁLISE:
 
-📊 *Panorama da semana*
-[2-3 linhas sobre o desempenho geral com números reais. Compare com o período anterior de forma clara. Ex: "O alcance total foi de X pessoas, uma queda de Y% em relação à semana anterior — movimento que acompanharemos de perto para ajustar a estratégia."]
+MODO CLIENTE (padrão — quando não pedir "interno"):
+Foco nos pontos positivos e construtivos. Tom de consultoria próxima.
+Estrutura:
+📊 *Panorama do ${periodLabel}*
+[Visão geral com números reais. Use metáfora para dar dimensão. Ex: "Suas publicações chegaram a X pessoas — isso é como ter um outdoor visto por toda a população de [cidade de referência]"]
 
-🏆 *Destaque da semana*
-[Identifique o conteúdo com melhor performance — cite o tema ou título do post/Reel. Diga o número (alcance, visualizações) e explique em linguagem simples por que você acredita que performou bem. Ex: "O Reel sobre X atingiu 22 mil pessoas — o melhor resultado do período. Conteúdos que entram em tendências do momento costumam ter esse tipo de distribuição orgânica pelo algoritmo."]
+🏆 *Destaque do período*
+[Melhor conteúdo com título/tema, número de alcance/visualizações e explicação simples do porquê performou. "Este Reel funcionou porque..." — dê uma razão clara baseada nos dados]
 
 📈 *O que está funcionando*
-• [métrica positiva com número, variação e explicação simples do que isso significa na prática]
-• [outro ponto positivo com contexto]
+• [ponto positivo com número e contexto didático]
+• [outro ponto positivo]
 
-⚠️ *Ponto de atenção*
-• [métrica ou comportamento que precisa de cuidado — seja específico. Explique o impacto prático para o cliente entender por que isso importa]
+⚠️ *Para ficar de olho*
+• [ponto de atenção com número, impacto e contexto — sem alarmismo, com orientação]
 
-💡 *Recomendação para a próxima semana*
-[1 ação concreta e específica baseada nos dados. Não seja genérico. Mostre que a recomendação vem dos dados do relatório.]
+💡 *Recomendação para o próximo ${periodLabel}*
+[1 ação concreta e específica baseada nos dados. Mostre que vem dos números.]
+
+MODO INTERNO (quando pedir "versão interna" ou "para o time"):
+Análise técnica completa para o time da agência. Pode incluir pontos críticos, oportunidades de melhoria e alertas.
+Estrutura:
+🔍 *Diagnóstico técnico — ${periodLabel}*
+[Análise completa sem filtro, incluindo quedas e inconsistências]
+⚠️ *Pontos críticos*
+• [problema específico com número]
+📋 *Ajustes recomendados*
+• [ação técnica para o time]
+📌 *Contexto para apresentar ao cliente*
+[Como comunicar os pontos negativos de forma construtiva]
 
 ---
-QUANDO GERAR TEXTO PARA WHATSAPP:
-- Tom informal e amigável, como uma conversa entre o gestor de conta e o cliente
-- Sem formatação markdown, sem emojis em excesso (máximo 2-3 ao longo do texto)
-- Estrutura: abertura positiva com dado real → destaque da semana → 1 ponto de atenção → recomendação → fechamento próximo
-- Máximo 5 parágrafos curtos
-- Escreva na primeira pessoa do plural (nós, a gente) como se fosse o time da SB falando
+MODO WHATSAPP:
+Tom informal, como o gestor de conta falando com o cliente. Sem markdown. Máximo 5 parágrafos. Primeira pessoa do plural. Comece com algo positivo real, mencione o destaque, aponte 1 ponto de atenção de forma leve, feche com próximos passos.
 
-PARA OUTRAS PERGUNTAS: responda de forma direta e técnica, sempre baseado nos dados do PDF. Se o cliente perguntar algo que não está no relatório, diga claramente.`;
+PARA OUTRAS PERGUNTAS: responda direto, baseado nos dados do relatório.`;
 
   try{
     const messages = [];
-    if(history.length === 0){
-      messages.push({role:'user', content:[
-        {type:'document', source:{type:'base64', media_type:'application/pdf', data:pdfBase64}},
-        {type:'text', text}
-      ]});
+    if(pdfBase64){
+      if(history.length===0){
+        messages.push({role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:pdfBase64}},{type:'text',text}]});
+      } else {
+        messages.push({role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:pdfBase64}},{type:'text',text:history[0].content}]});
+        for(let i=1;i<history.length;i++) messages.push(history[i]);
+        messages.push({role:'user',content:text});
+      }
     } else {
-      messages.push({role:'user', content:[
-        {type:'document', source:{type:'base64', media_type:'application/pdf', data:pdfBase64}},
-        {type:'text', text: history[0].content}
-      ]});
-      for(let i=1; i<history.length; i++) messages.push(history[i]);
-      messages.push({role:'user', content: text});
+      const ctx = 'Dados do dashboard:\n'+JSON.stringify(dashboardData,null,2);
+      if(history.length===0){
+        messages.push({role:'user',content:ctx+'\n\n'+text});
+      } else {
+        messages.push({role:'user',content:ctx+'\n\n'+history[0].content});
+        for(let i=1;i<history.length;i++) messages.push(history[i]);
+        messages.push({role:'user',content:text});
+      }
     }
+    history.push({role:'user',content:text});
 
-    history.push({role:'user', content: text});
-
-    const r = await fetch('/api/reportei', {
+    const r = await fetch('/api/reportei',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-action':'claude-chat'
-      },
-      body: JSON.stringify({system: systemPrompt, messages})
+      headers:{'Content-Type':'application/json','x-action':'claude-chat'},
+      body:JSON.stringify({system:systemPrompt,messages})
     });
     const d = await r.json();
-    const reply = d.content && d.content[0] ? d.content[0].text : 'Não consegui processar. Tente novamente.';
-    history.push({role:'assistant', content: reply});
-
+    const reply = d.content&&d.content[0]?d.content[0].text:'Não consegui processar. Tente novamente.';
+    history.push({role:'assistant',content:reply});
     removeThinking();
 
-    const isInsight = /insight|anali|relatório|relatorio|destaque|semana/i.test(text);
-    const isWhatsapp = /whatsapp|mensagem pra|mensagem para/i.test(text);
+    const isCard = /insight|anali|panorama|relatório|relatorio|destaque|semana|mês|período|post|atenção|melhorar|interno/i.test(text);
 
     let html = reply
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -410,32 +460,43 @@ PARA OUTRAS PERGUNTAS: responda de forma direta e técnica, sempre baseado nos d
       .replace(/\*(.*?)\*/g,'<em>$1</em>')
       .replace(/\n/g,'<br>');
 
-    if(isInsight || isWhatsapp){
-      addMsgRaw('bot',`<div class="insight-card">
-        <div class="ic-header">
+    if(isCard||isWhatsapp||isInterno){
+      const label = isInterno?'análise interna — time sb':isWhatsapp?'texto para whatsapp':'insights sbot';
+      const labelColor = isInterno?'#f87171':isWhatsapp?'#4ade80':'var(--yellow)';
+      const borderColor = isInterno?'#f87171':isWhatsapp?'#4ade80':'var(--yellow)';
+      addMsgRaw('bot',`<div class="insight-card" style="border-left-color:${borderColor}">
+        <div class="ic-label" style="color:${labelColor}">
           <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          ${isWhatsapp ? 'texto para whatsapp' : 'análise sbot'}
+          ${label}
         </div>
         <div class="ic-body">${html}</div>
-        <button class="copy-btn" onclick="copyInsight(this)">
-          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          copiar
-        </button>
+        <div class="card-actions">
+          <button class="copy-btn" onclick="copyText(this,'body')">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            copiar
+          </button>
+          ${!isInterno&&!isWhatsapp?`<button class="copy-wpp" onclick="generateWhatsapp()">💬 gerar versão WhatsApp</button>`:''}
+        </div>
       </div>`);
     } else {
       addMsgRaw('bot', html);
     }
   }catch(e){
     removeThinking();
-    addMsg('bot','Erro ao processar o relatório. Tente novamente.');
+    addMsg('bot','Erro ao processar. Tente novamente.');
   }
 }
 
-function copyInsight(btn){
+function generateWhatsapp(){
+  addMsg('user','Gerar versão para WhatsApp baseada nessa análise');
+}
+
+function copyText(btn){
   const body = btn.closest('.insight-card').querySelector('.ic-body');
   navigator.clipboard.writeText(body.innerText).then(()=>{
-    btn.innerHTML = '✓ copiado!';
-    setTimeout(()=>{ btn.innerHTML = '<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> copiar'; }, 2000);
+    const orig = btn.innerHTML;
+    btn.textContent='✓ copiado!';
+    setTimeout(()=>{ btn.innerHTML=orig; },2000);
   });
 }
 </script>
